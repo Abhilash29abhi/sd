@@ -1,0 +1,593 @@
+1.navigator:
+
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: FirstScreen()
+      
+    );
+  }
+}
+
+class FirstScreen extends StatelessWidget {
+  const FirstScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => SecondScreen()));
+        },child: Text('Next Screen'),),
+      ),
+    );
+  }
+}
+
+class SecondScreen extends StatelessWidget {
+  const SecondScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(child: Text('Second Screen'),),
+    );
+  }
+}
+
+2.named-routes:
+
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      initialRoute: '/home',
+      routes: {
+        '/home':(context)=>FirstScreen(),
+        '/second':(context)=>SecondScreen(),
+      },
+    );
+  }
+}
+
+class FirstScreen extends StatelessWidget {
+  const FirstScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child:ElevatedButton(onPressed: (){
+          Navigator.pushNamed(context, '/second');
+        }, child: Text('click me'))
+      ),
+    );
+  }
+}
+
+class SecondScreen extends StatelessWidget {
+  const SecondScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body:Center(
+        child: ElevatedButton(onPressed: (){
+          Navigator.pop(context);
+        }, child: Text('second button')),
+      )
+    );
+  }
+}
+
+3.stateful and staleless:
+
+import 'package:flutter/material.dart';
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return (MaterialApp(home:CounterScreen()));
+  }
+}
+
+class CounterScreen extends StatefulWidget {
+  const CounterScreen({super.key});
+
+  @override
+  State<CounterScreen> createState() => _CounterScreenState();
+}
+
+class _CounterScreenState extends State<CounterScreen> {
+
+  int counter=0;
+
+  void incrementCounter(){
+    setState(() {
+      counter++;
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text('$counter'),
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: incrementCounter,child:Icon(Icons.add),),
+    );
+  }
+}
+
+4.provider:
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+void main() {
+  runApp(ChangeNotifierProvider(
+    create: (context) => CounterProvider(),
+    child: MyApp(),
+  ));
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: HomeScreen(),
+    );
+  }
+}
+
+class CounterProvider extends ChangeNotifier {
+  int _counter = 0;
+  int get counter => _counter;
+  void incrementCounter() {
+    _counter++;
+    notifyListeners();
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final counter = context.watch<CounterProvider>().counter;
+    return Scaffold(
+      body: Center(
+        child: Text('$counter'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.read<CounterProvider>().incrementCounter(),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+5.crete custom widgets for Ui:
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Column(
+          children: [
+            Mybutton(),
+            Mybutton(),
+          ]
+        ),
+      )
+      
+    );
+  }
+}
+
+class Mybutton extends StatelessWidget {
+  const Mybutton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return 
+         ElevatedButton(onPressed: (){
+          print("hello");
+        },child: Text('Click button'),);
+      
+  }
+}
+
+
+
+
+6.themes:
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.teal, // Button background color
+            foregroundColor: Colors.white, // Text color
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Padding
+          ),
+        ),
+      ),
+      home: Scaffold(
+        appBar: AppBar(title: Text('Simple Themed Button')),
+        body: Column(
+          children: [
+            ElevatedButton(
+            onPressed: () {
+              print('Button Pressed!');
+            },
+            child: Text('Click Me'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              print('Button Pressed!');
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white
+            ),
+            child: Text('Click Me'),
+          ),
+          ],
+        ),
+        
+      ),
+    );
+  }
+}
+
+7.responsive Ui:
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    var screenwidth= MediaQuery.of(context).size.width;
+    return MaterialApp(
+      home: Scaffold(
+        body: LayoutBuilder(
+          builder: (context,constraints){
+            if(screenwidth<600){
+              return Column(
+                children: [
+                  Container(width: 100,height: 100,color: Colors.red,),
+                  Container(width: 100,height: 100,color: Colors.green,),
+                  Container(width: 100,height: 100,color: Colors.yellow,),
+                ],
+              );
+            }
+            else{
+              return Row(
+                children: [
+                  Container(width: 100,height: 100,color: Colors.red,),
+                  Container(width: 100,height: 100,color: Colors.green,),
+                  Container(width: 100,height: 100,color: Colors.yellow,),
+                ],
+              );
+            }
+          }
+        )
+      )
+    );
+  }
+}
+
+8.media-quireis:
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    var screenwdith= MediaQuery.of(context).size.width;
+    return MaterialApp(
+      home: Scaffold(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            if(screenwdith<600){
+              return Column(
+                children: [
+                  Container(width: 100,height: 100,color: Colors.red,),
+                  ],
+              );
+            }
+            else if(screenwdith<900){
+              return Row(
+                children: [
+                   Container(width: 100,height: 100,color: Colors.red,),
+                  Container(width: 100,height: 100,color: Colors.green,), 
+                ],
+              );
+            }
+            else{
+               return Row(
+                children: [
+                   Container(width: 100,height: 100,color: Colors.red,),
+                  Container(width: 100,height: 100,color: Colors.green,),
+                   Container(width: 100,height: 100,color: Colors.black,),
+                  
+                ],
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+
+9.row-column-stack:
+
+// import 'package:flutter/material.dart';
+
+// void main() {
+//   runApp(const MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+
+//         body:Column(
+          
+//           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//           children: [
+            
+//             Text("hello world"),
+//             Text("second"),
+//             Text("third")
+//           ],
+//         ) 
+//       ),
+      
+//     );
+//   }
+// }
+
+//row
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+
+        body:Row(
+          
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            
+            Container(width: 100,height: 100,color: Colors.red,
+            child: Text("hello world")),
+            Container(width: 50,height: 50,color: Colors.blue),
+            Container(width: 100,height: 100,color: Colors.red),
+
+          ],
+        ) 
+      ),
+      
+    );
+  }
+}
+
+// //stack
+// import 'package:flutter/material.dart';
+
+// void main() {
+//   runApp(const MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//           body: Center(
+//         child: Stack(
+//           children: [
+//             Container(width: 100,height: 100,color: Colors.red),
+//             Container(width: 50,height: 50,color: Colors.blue),
+//           ],
+//         ),
+//       )),
+//     );
+//   }
+// }
+
+
+10.text-image-container:
+
+Text Widget
+import 'package:flutter/material.dart';
+void main()=>runApp(const GeeksForGeeks());
+
+class GeeksForGeeks extends StatelessWidget{
+  const GeeksForGeeks({super.key});
+  @override
+  Widget build(BuildContext context){
+     return MaterialApp(
+       home:Scaffold(
+         backgroundColor:Colors.lightGreen,
+         appBar:AppBar(
+           backgroundColor:Colors.green,
+           title:const Text('Welcome Screen'),
+         ),
+         body:Container(
+           child:const Center(
+             child:Text("Hello World!"),
+           ),
+         ),
+       ),
+     );
+  }
+}
+Image Widget
+import 'package:flutter/material.dart';
+void main() => runApp(const GeeksForGeeks());
+
+class GeeksForGeeks extends StatelessWidget {
+  const GeeksForGeeks({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.lightGreen,
+        appBar: AppBar(
+          backgroundColor: Colors.green,
+          title: const Text('Image Widget'),
+        ),
+        body: Container(
+          child: Center(
+            child: Image.network(
+              'https://th.bing.com/th/id/R.d7e789c3b8bcb2b7880dd3b4b1d3edd6?rik=ytog4A4XipK5yA&riu=http%3a%2f%2ftechnobrains.io%2fwp-content%2fuploads%2f2021%2f07%2fflutter-Featured-Blog-Image2.jpg&ehk=qNtlUWmyUkVCjiGvmi7dbdWp32XXAQM3qbdnfOtyuBw%3d&risl=&pid=ImgRaw&r=0',
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+Container Widget
+import 'package:flutter/material.dart';
+void main()=>runApp(const Geeks());
+
+class Geeks extends StatelessWidget{
+  const Geeks({super.key});
+  @override
+  Widget build(BuildContext context){
+    return MaterialApp(
+      home:Scaffold(
+        backgroundColor:Colors.lightGreen,
+        appBar:AppBar(
+          backgroundColor:Colors.green,
+          title:const Text("Container Widget"),
+        ),
+        body:Container(
+          height:200,
+          width:double.infinity,
+          alignment:Alignment.center,
+          margin:const EdgeInsets.all(20),
+          padding:const EdgeInsets.all(30),
+          decoration:BoxDecoration(
+            border:Border.all(color:Colors.black,width:3)
+          ),
+          child:const Text("Hello I am a Container"),
+        ),
+      ),
+    );
+  }
+}
+
+
+Container Widget
+import 'package:flutter/material.dart';
+void main()=>runApp(const Geeks());
+
+class Geeks extends StatelessWidget{
+  const Geeks({super.key});
+  @override
+  Widget build(BuildContext context){
+    return MaterialApp(
+      home:Scaffold(
+        backgroundColor:Colors.lightGreen,
+        appBar:AppBar(
+          backgroundColor:Colors.green,
+          title:const Text("Container Widget"),
+        ),
+        body:Container(
+          height:200,
+          width:double.infinity,
+          alignment:Alignment.center,
+          margin:const EdgeInsets.all(20),
+          padding:const EdgeInsets.all(30),
+          decoration:BoxDecoration(
+            border:Border.all(color:Colors.black,width:3)
+          ),
+          child:const Text("Hello I am a Container"),
+        ),
+      ),
+    );
+  }
+}
+
+
+
